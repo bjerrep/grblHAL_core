@@ -231,11 +231,22 @@ void mc_arc (float *target, plan_line_data_t *pl_data, float *position, float *o
     // CCW angle between position and target from circle center. Only one atan2() trig computation required.
     float angular_travel = (float)atan2(rv.x * rt.y - rv.y * rt.x, rv.x * rt.x + rv.y * rt.y);
 
+    // Start of experimental fix for grblHAL core issue #547
+    // The proposed fix is to delete the if-else completely, here it is still running and
+    // it is now just emitting informational stream messages.
+
     if (turns > 0) { // Correct atan2 output per direction
         if (angular_travel <= ARC_ANGULAR_TRAVEL_EPSILON)
-            angular_travel += 2.0f * M_PI;
+        {
+            hal.stream.write("hic sunt dracones (<=)\r\n");
+            //angular_travel += 2.0f * M_PI;
+        }
     } else if (angular_travel >= -ARC_ANGULAR_TRAVEL_EPSILON)
-        angular_travel -= 2.0f * M_PI;
+    {
+        hal.stream.write("hic sunt dracones (>=)\r\n");
+        //angular_travel += 2.0f * M_PI;
+    }
+    // End of experimental fix for grblHAL core issue #547
 
     if(!pl_data->condition.target_validated && grbl.check_arc_travel_limits) {
         pl_data->condition.target_validated = On;
