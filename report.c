@@ -32,6 +32,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "hal.h"
 #include "report.h"
@@ -850,6 +851,25 @@ void report_build_info (char *line, bool extended)
     hal.stream.write(uitoa(GRBL_BUILD));
     hal.stream.write(":");
     hal.stream.write(line);
+    hal.stream.write("]" ASCII_EOL);
+
+    // General build info. Define an optional BUILD_MSG symbol to add a custom text with e.g. firmware author or purpose
+    hal.stream.write("[BUILDDATE:" __DATE__ " " __TIME__ "]" ASCII_EOL);
+    hal.stream.write("[BUILDINFO:");
+    #ifdef DEBUG
+        hal.stream.write("DEBUG");
+    #else
+        hal.stream.write("RELEASE");
+    #endif
+    extern unsigned int g_pfnVectors;
+    sprintf(buf, ":0x%08X:", (unsigned int) &g_pfnVectors);
+    hal.stream.write(buf);
+    #ifdef BUILD_MSG
+        // Remember to define BUILD_MSG as a "string"
+        hal.stream.write(BUILD_MSG);
+    #else
+        hal.stream.write("UNDEFINED");
+    #endif
     hal.stream.write("]" ASCII_EOL);
 
 #if COMPATIBILITY_LEVEL == 0
