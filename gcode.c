@@ -3496,7 +3496,11 @@ status_code_t gc_execute_block (char *block)
 
         case NonModal_SetCoordinateData:
             if(gc_block.values.l == 2 || gc_block.values.l == 20) {
-                settings_write_coord_data(gc_block.values.coord_data.id, &gc_block.values.coord_data.xyz);
+                if(!settings.flags.g92_is_volatile) {
+                    // experiment no 3. For a quick hack abuse the g92_is_volatile flag (#384) to skip writing to persistent storage
+                    // which gives an odd delay in otherwise trivial G10 zeroing. Talk about getting a life as an alternative.
+                    settings_write_coord_data(gc_block.values.coord_data.id, &gc_block.values.coord_data.xyz);
+                }
                 // Update system coordinate system if currently active.
                 if (gc_state.modal.coord_system.id == gc_block.values.coord_data.id) {
                     memcpy(gc_state.modal.coord_system.xyz, gc_block.values.coord_data.xyz, sizeof(gc_state.modal.coord_system.xyz));
