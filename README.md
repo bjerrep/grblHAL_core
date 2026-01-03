@@ -4,7 +4,7 @@
 
 This is a experimental fork of https://github.com/grblHAL/core intended to be used with the grblHAL STM32  driver [STM32H7xx](https://github.com/dresco/STM32H7xx) fork [here](https://github.com/bjerrep/STM32H7xx). The STM32H7xx fork (last link) is modified to take the submodule 'grbl' as this repository.
 
-Please note that this repository and the STM32H7xx fork will per definition always be super out-of-date and/or appear to be rather unmaintained. Its just a backup of the firmware for a BTT SKR3 controller that seems to work on at least the CNC in the basement.
+Please note that this repository and the STM32H7xx fork will per definition always be super out-of-date and/or appear to be rather unmaintained. This repository is most of all just a backup of the firmware for a BTT SKR3 controller that seems to work on at least my CNC. This fork contains a few socalled experiments:
 
 
 
